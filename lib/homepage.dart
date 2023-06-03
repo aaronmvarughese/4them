@@ -7,7 +7,7 @@ import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+//import 'package:url_launcher/url_launcher_string.dart';
 
 class homepage extends StatefulWidget {
   const homepage({super.key});
@@ -107,7 +107,8 @@ class _homepageState extends State<homepage> {
                       decoration: const BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage('assets/images/virtualAssistant.png'),
+                          image:
+                              AssetImage('assets/images/virtualAssistant.png'),
                         ),
                       ),
                     )
@@ -162,15 +163,17 @@ class _homepageState extends State<homepage> {
         delay: const Duration(seconds: 2),
         child: FloatingActionButton(
           onPressed: () async {
-            if (await speechToText.hasPermission && speechToText.isNotListening) {
+            if (await speechToText.hasPermission &&
+                speechToText.isNotListening) {
               await startListening();
             } else if (speechToText.isListening) {
               await stopListening();
               final result = lastWords.contains('WhatsApp');
               if (result) {
-                speech = 'WhatsApp';
+                speech = await openAIService.isArtPromptAPI(lastWords);
+                await systemspeak(speech);
                 setState(() {});
-      
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -435,9 +438,12 @@ class HomescreenState extends State<Homescreen>
 void openWhatsApp() async {
   String phoneNumber = '916238415142';
 
-  final url = 'https://wa.me/$phoneNumber';
-  if (await canLaunchUrlString(url)) {
-    await launchUrlString(url);
+  //final Uri url = Uri.parse('https://api.whatsapp.com/send/?phone=1916238415142&text=Hi+%EF%BF%BD&type=phone_number&app_absent=0');
+  final Uri url = Uri.parse('https://web.whatsapp.com/send/?phone=1916238415142&text=Hi+%EF%BF%BD&type=phone_number&app_absent=0');
+  //final Uri url = Uri.parse('https://web.whatsapp.com/');
+  //final Uri url = Uri.parse('https://wa.me/1$phoneNumber');
+  if (await canLaunchUrl(url)) {
+    await launchUrl(url);
   } else {
     throw 'Could not launch $url';
   }

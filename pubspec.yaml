@@ -43,6 +43,7 @@ dependencies:
   url_launcher: ^6.0.3
   flutter_tts: ^3.7.0
   animate_do: ^3.0.2
+  highlighter_coachmark: ^0.0.3
 
 
 dev_dependencies:

@@ -144,6 +144,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.4"
+  highlighter_coachmark:
+    dependency: "direct main"
+    description:
+      name: highlighter_coachmark
+      sha256: e01e99254ec3caeca2d00f452c299fa8588233874c2e0b02119397ac83417215
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.3"
   html:
     dependency: transitive
     description:
