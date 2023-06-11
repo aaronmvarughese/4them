@@ -6,8 +6,12 @@ import 'package:project_4them/open_service.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:url_launcher/url_launcher.dart';
+//import 'package:url_launcher/url_launcher.dart';
 //import 'package:url_launcher/url_launcher_string.dart';
+
+//import 'package:call_log/call_log.dart';
+import 'package:project_4them/whatsapp.dart';
+import 'package:project_4them/CallerScreen.dart';
 
 class homepage extends StatefulWidget {
   const homepage({super.key});
@@ -168,20 +172,28 @@ class _homepageState extends State<homepage> {
               await startListening();
             } else if (speechToText.isListening) {
               await stopListening();
-              final result = lastWords.contains('WhatsApp');
-              if (result) {
-                speech = await openAIService.isArtPromptAPI(lastWords);
+              final result1 = lastWords.contains('call');
+             final result2 = lastWords.contains('WhatsApp');
+              if (result1) {
+                //speech = await openAIService.isArtPromptAPI(lastWords);
                 await systemspeak(speech);
                 setState(() {});
 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const Homescreen(),
+                    builder: (context) => const CallerScreen(),
+                  ),
+                );
+              } else if (result2) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WhatsApp(),
                   ),
                 );
               } else {
-                speech = await openAIService.isArtPromptAPI(lastWords);
+                //speech = await openAIService.isArtPromptAPI(lastWords);
                 await systemspeak(speech);
                 setState(() {});
               }
@@ -195,262 +207,4 @@ class _homepageState extends State<homepage> {
       ),
     );
   }
-}
-
-class Homescreen extends StatefulWidget {
-  const Homescreen({Key? key}) : super(key: key);
-
-  @override
-  HomescreenState createState() => HomescreenState();
-}
-
-class HomescreenState extends State<Homescreen>
-    with SingleTickerProviderStateMixin {
-  late TabController _controller;
-  OverlayEntry? overlayEntry;
-  int currentPageIndex = 0;
-
-  void createHighlightOverlay({
-    required AlignmentDirectional alignment,
-    required Color borderColor,
-  }) {
-    removeHighlightOverlay();
-
-    assert(overlayEntry == null);
-
-    overlayEntry = OverlayEntry(
-      builder: (BuildContext context) {
-        return SafeArea(
-          child: Align(
-            alignment: alignment,
-            heightFactor: 1.0,
-            child: DefaultTextStyle(
-              style: const TextStyle(
-                color: Colors.blue,
-                fontWeight: FontWeight.bold,
-                fontSize: 14.0,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text('Tap here for'),
-                  Builder(builder: (BuildContext context) {
-                    switch (currentPageIndex) {
-                      case 0:
-                        return Column(
-                          children: const <Widget>[
-                            Text(
-                              'chat page',
-                              style: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_downward,
-                              color: Colors.red,
-                            ),
-                          ],
-                        );
-                      case 1:
-                        return Column(
-                          children: const <Widget>[
-                            Text(
-                              'Status page',
-                              style: TextStyle(
-                                color: Colors.green,
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_downward,
-                              color: Colors.green,
-                            ),
-                          ],
-                        );
-                      case 2:
-                        return Column(
-                          children: const <Widget>[
-                            Text(
-                              'Calls page',
-                              style: TextStyle(
-                                color: Colors.orange,
-                              ),
-                            ),
-                            Icon(
-                              Icons.arrow_downward,
-                              color: Colors.orange,
-                            ),
-                          ],
-                        );
-                      default:
-                        return const Text('No page selected.');
-                    }
-                  }),
-                  SizedBox(
-                    width: 80,
-                    height: 40.0,
-                    child: Center(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: borderColor,
-                            width: 4.0,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-
-    Overlay.of(context, debugRequiredFor: widget).insert(overlayEntry!);
-  }
-
-  void removeHighlightOverlay() {
-    overlayEntry?.remove();
-    overlayEntry = null;
-  }
-
-  @override
-  void dispose() {
-    removeHighlightOverlay();
-    super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = TabController(length: 4, vsync: this, initialIndex: 1);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Whatsapp",
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: () {},
-          ),
-          PopupMenuButton<String>(
-            onSelected: (value) {},
-            icon: const Icon(
-              Icons.more_vert,
-              color: Colors.white,
-            ),
-            itemBuilder: (BuildContext context) {
-              return [
-                const PopupMenuItem(
-                  value: "New group",
-                  child: Text("New group"),
-                ),
-                const PopupMenuItem(
-                  value: "New broadcast",
-                  child: Text("New broadcast"),
-                ),
-                const PopupMenuItem(
-                  value: "Whatsapp Web",
-                  child: Text("Whatsapp Web"),
-                ),
-                const PopupMenuItem(
-                  value: "Starred messages",
-                  child: Text("Starred messages"),
-                ),
-                const PopupMenuItem(
-                  value: "Settings",
-                  child: Text("Settings"),
-                ),
-              ];
-            },
-          )
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(kToolbarHeight),
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            children: [
-              TabBar(
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                controller: _controller,
-                indicatorColor: Colors.white,
-                onTap: (text) {},
-                tabs: const [
-                  Tab(
-                    icon: Icon(Icons.camera_alt, color: Colors.white),
-                  ),
-                  Tab(
-                    text: "CHATS",
-                  ),
-                  Tab(
-                    text: "STATUS",
-                  ),
-                  Tab(
-                    text: "CALLS",
-                  )
-                ],
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: const Color.fromRGBO(18, 140, 126, 1),
-      ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          const ListTile(
-            leading: CircleAvatar(
-              radius: 40,
-            ),
-            title: Text("Contact 1"),
-          ),
-          const SizedBox(height: 10),
-          const Divider(),
-          const SizedBox(height: 10),
-          const SizedBox(
-            height: 500,
-          ),
-          ElevatedButton(
-            onPressed: () {
-              openWhatsApp();
-            },
-            child: const Text('Open Whatsapp'),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromRGBO(18, 140, 126, 1),
-        child: const Icon(Icons.chat, color: Colors.white),
-      ),
-    );
-  }
-}
-
-void openWhatsApp() async {
-  String phoneNumber = '916238415142';
-
-  //final Uri url = Uri.parse('https://api.whatsapp.com/send/?phone=1916238415142&text=Hi+%EF%BF%BD&type=phone_number&app_absent=0');
-  final Uri url = Uri.parse('https://web.whatsapp.com/send/?phone=1916238415142&text=Hi+%EF%BF%BD&type=phone_number&app_absent=0');
-  //final Uri url = Uri.parse('https://web.whatsapp.com/');
-  //final Uri url = Uri.parse('https://wa.me/1$phoneNumber');
-  if (await canLaunchUrl(url)) {
-    await launchUrl(url);
-  } else {
-    throw 'Could not launch $url';
-  }
-}
-
-class Contact {
-  final String name;
-
-  Contact({required this.name});
 }

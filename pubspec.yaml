@@ -44,6 +44,8 @@ dependencies:
   flutter_tts: ^3.7.0
   animate_do: ^3.0.2
   highlighter_coachmark: ^0.0.3
+  flutter_phone_direct_caller: ^2.1.1
+  call_log: ^4.0.0
 
 
 dev_dependencies:
