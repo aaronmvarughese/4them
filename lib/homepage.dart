@@ -1,15 +1,10 @@
 // ignore_for_file: camel_case_types, use_build_context_synchronously
-
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:project_4them/open_service.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-//import 'package:url_launcher/url_launcher.dart';
-//import 'package:url_launcher/url_launcher_string.dart';
-
-//import 'package:call_log/call_log.dart';
 import 'package:project_4them/whatsapp.dart';
 import 'package:project_4them/CallerScreen.dart';
 
@@ -173,8 +168,9 @@ class _homepageState extends State<homepage> {
             } else if (speechToText.isListening) {
               await stopListening();
               final result1 = lastWords.contains('call');
-             final result2 = lastWords.contains('WhatsApp');
+              final result2 = lastWords.contains('WhatsApp');
               if (result1) {
+                speech = 'Opening Phone App';
                 //speech = await openAIService.isArtPromptAPI(lastWords);
                 await systemspeak(speech);
                 setState(() {});
@@ -186,6 +182,9 @@ class _homepageState extends State<homepage> {
                   ),
                 );
               } else if (result2) {
+                speech = 'Opening WhatsApp App';
+                await systemspeak(speech);
+                setState(() {});
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -193,7 +192,7 @@ class _homepageState extends State<homepage> {
                   ),
                 );
               } else {
-                //speech = await openAIService.isArtPromptAPI(lastWords);
+                speech = await openAIService.isArtPromptAPI(lastWords);
                 await systemspeak(speech);
                 setState(() {});
               }
