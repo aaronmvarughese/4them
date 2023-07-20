@@ -133,9 +133,9 @@ class WhatsAppState extends State<WhatsApp>
               controller: _tabController,
               children: const [
                 Center(child: Text('Community')),
-                Center(child: Text('Recent Calls')),
+                Center(child: Text('Chats')),
                 Center(child: Text('Status')),
-                Center(child: Text('Contacts')),
+                Center(child: Text('Calls')),
               ],
             ),
           ),

@@ -37,6 +37,7 @@ class _homepageState extends State<homepage> {
 
   Future<void> systemspeak(String text) async {
     await flutterTts.speak(text);
+    await flutterTts.setLanguage('Malayalam');
   }
 
   Future<void> initSpeechToText() async {

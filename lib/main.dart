@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:project_4them/homepage.dart';
+import 'package:project_4them/video.dart';
 
 void main() {
   runApp(const App_4Them());
@@ -19,7 +20,7 @@ class App_4Them extends StatelessWidget {
           fontFamily: 'Product Sans',
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: const AppBarTheme(backgroundColor: Colors.white)),
-      home: const homepage(),
+      home: const WhatsAppVideoTutorial(),
     );
   }
 }
