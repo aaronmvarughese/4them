@@ -41,7 +41,7 @@ class WhatsAppVideoTutorialState extends State<WhatsAppVideoTutorial> {
     return Scaffold(
       body: Container(
         color: Colors.black, // Customize the background color
-        padding: EdgeInsets.all(16.0), // Customize the padding
+        //padding: EdgeInsets.all(16.0), // Customize the padding
         child: Center(
           child: Chewie(
             controller: _chewieController,
